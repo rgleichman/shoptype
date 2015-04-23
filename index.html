@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<meta charset="utf-8" />
+<title>ShopType - Ready to Play!</title>
+<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+	<div id="wrapper">
+		<section id="main">
+			<div id="shelves">
+				<div id="shelf-0" class="shelf">
+				</div>
+				<!-- <div id="shelf-1" class="shelf">
+				</div>
+				<div id="shelf-2" class="shelf">
+				</div> -->
+			</div>
+			<div id="foreground">
+				<div id="floor">
+				  <div id="cart">
+				    <div id="cart_sub"></div>
+				  </div>
+				</div>
+				<div id="footer">
+
+				  <div id="itemsNeededBox">
+				  </div>				  
+				  <div id="bonusBox">
+				  </div>
+				  <form id="wordBox">
+				    <textarea id="textArea" rows=1>
+				    </textarea>
+				  </form>
+				  <!--<div id="wordBox">
+				  </div>-->
+				</div>
+			</div>
+		</section>
+		<footer id="footer">
+			
+		</footer>
+		<div class="animations">
+			
+		</div>
+		<div id="start">
+			<div id="doors_wrapper">
+				<div id="windows_wrapper">
+					<div id="windows">
+						<div id="window-left" class="window"></div>
+						<div id="window-right" class="window"></div>
+					</div>
+				</div>
+				<div id="doors">
+					<div class="door door-left"></div>
+					<div id="door-separator"><span>Press Enter</span></div>
+					<div class="door door-right"></div>
+				</div>
+			</div>
+			<div id="doormat">
+				<div id="doormat_sub">
+				</div>
+			</div>
+			<div id="username">
+				<div id="username_sub">
+					<p class="username_label">Username:</p>
+					<input type="text" name="username" />
+				</div>
+			</div>
+			<!-- <h1>Welcome to ShopType!</h1>
+			<h2><a href="#" id="play_new">Play</a><h2> -->
+		</div>
+		<div id="game_over">
+			<h1 id="congrats">Congratulations!</h1>
+			<p id="total_time"></p>
+			<a href="javascript:window.location.reload()">Play Again</a>			
+		</div>
+		<div id="round_msg">
+		  Too slow!
+		  Try again
+		</div>
+	</div>
+	<div id="allright">
+	  <audio id="s_allright">
+	    <source src="soundz/allright.ogg" type="audio/ogg" />
+	  </audio>
+	</div>
+	<div id="buzz">  
+	  <audio id="s_buzz">
+	    <source src="soundz/buzz.ogg" type="audio/ogg" />
+	  </audio>
+	</div>
+	<div id="clapping">
+	  <audio id="s_clapping">
+	    <source src="soundz/clapping.ogg" type="audio/ogg" />
+	  </audio>
+	</div>
+	
+	<div id="door">
+	  <audio id="s_door">
+	    <source src="soundz/door.ogg" type="audio/ogg" />
+	  </audio>
+	</div>
+	<div id="miau">
+	  <audio id="s_miau">
+	    <source src="soundz/miau.ogg" type="audio/ogg" />
+	  </audio>
+	</div>
+	<div id="ping">
+	  <audio id="s_ping">
+	    <source src="soundz/ping.ogg" type="audio/ogg" />
+	  </audio>
+	</div>
+</body>
+</html>
