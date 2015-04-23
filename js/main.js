@@ -15,8 +15,8 @@ var cart = {
 }
 
 var allFood = [["bread","cat food","green tea","medicine","milk"]
-	       ,["broccoli","_cat","rice","tooth paste","vegetables"]
-	       ,["cookies","fish","_miau","salsa","spicy"]
+	       ,["broccoli"," cat","rice","tooth paste","vegetables"]
+	       ,["cookies","fish"," miau","salsa","spicy"]
 	       ,["$1","$5","$10","$20","$50","$100"]
 	      ]
 
@@ -206,7 +206,7 @@ function loadItems() {
     }
 
     $('#shelf-0').html(buffer);
-    $('.shelf [name="_miau"]').addClass('miau');
+    $('.shelf [name=" miau"]').addClass('miau');
 }
 
 function shuffle(o){
