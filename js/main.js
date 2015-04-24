@@ -63,14 +63,6 @@ var logInfo = function(){
         var str = "?start=" + timer.beginTime + "&round=" + roundNum
         + "&duration=" + timer.elapsedTime() + "&mistakes=" + obj.errors            
         + "&username=" + obj.username + "&dump=" + dump;
-        // $.ajax({
-        //     url: '../log/' + str,
-        //     success: function(response) {
-        //         if (response != 1) {
-        //             console.log("Error: could not log gameplay")
-        //         }
-        //     }
-        // })
     }
 }
 
@@ -131,13 +123,7 @@ function setup() {
     $(document).click(function(){
         $('#textArea').focus();
     });
-    //new change (seems to make it red after pressing enter)
-//    $('#textArea').keyup(function(){ 
-//	if (state === 0) { window.setTimeout(function() { typedFoods() }, 0) } 
-//    });
-    $('#textArea').keyup(typedFoods);
-    //$('#textArea').keyup(checkEnterPressed);
-    $(document).keyup(checkEnterPressed);
+    $(document).keyup(typedFoods);
     changeWordState('normalWord');
     timer.restart();  
     roundTimer.restart();
@@ -147,7 +133,6 @@ function setup() {
     $('#s_door').get(0).play();
     startRound(true);
 //    updateBonusBox(0);
-//    checkEndOfRound();
 }
 function startRound(goFaster){
 
@@ -216,13 +201,6 @@ function shuffle(o){
     return o;
 };
 
-//function keyAction(e) {
-/*    if(state == 0){
-    typedFoods(String.fromCharCode(e.which).toLowerCase());
-    }
-*/
-//}
-
 function stringFromCharArray(arr){
     var rtnString = "";
     for(ch in arr){
@@ -235,6 +213,10 @@ function stringFromCharArray(arr){
 function typedFoods(letter){
 //    updateBonusBox();
 //    charsTyped.push(letter);
+    if (state === 1 && letter && letter.which === 13) {
+	window.location.reload();
+	return;
+    }
     if(state !== 0){
 	return;
     }
@@ -242,25 +224,46 @@ function typedFoods(letter){
     if(trimmed === ''){
 	$('#textArea').val(trimmed);
     }
-    if(state === 2){
-	return;
-    }
+    var textVal =  $('#textArea').val().replace(/(\r\n|\n|\r)/gm,"");
+    $('#textArea').val(textVal);
     
     if(letter && letter.which === 13){
+	//Enter was pressed
+	for (f in food) {
+            if (food[f] === textVal.toLowerCase()) {
+		/*
+		  var ping = $('#s_ping').get(0);
+		  ping.volume = 1;
+		  ping.play();
+		*/
+		soundPlayer.playBell();
+		numItemsOffList++;
+		cart.numItems++;
+		
+		if(numItemsOffList >= gameVars.numItemsNeeded){
+                    return gameOver();
+		} else {
+                    if (cart.numItems >= gameVars.itemsPerRound) {
+			state = 2;
+                    }    
+                    addToCart($('.item[name="' + food[f] + '"]'));
+		}
+		updateItemsNeededBox();
+		$('#textArea').val("");
+		
+		return;
+            }
+	}
 	return;
     }
     //New: remove newline so that if enter is pressed it stays green
-    charsTyped = $('#textArea').val().replace(/(\r\n|\n|\r)/gm,"");
+    charsTyped = textVal
     var validFoods = Array();
     function selectFood(){
 	for (i in validFoods) {
             $('.shelf .item[name="' + validFoods[i] + '"]').addClass('selected');
 	}
     }
-
-
-//    $('#wordBox').html(stringFromCharArray(charsTyped));
-
     for(f in food){
         var good = true;
         for(ch in charsTyped){
@@ -309,58 +312,6 @@ function typedFoods(letter){
     return validFoods;
 }
 
-function checkEnterPressed(e) {
-    if (e.which === 13) {
-        pressEnter();
-    }
-}
-
-function pressEnter() {
-    //reload if in game over
-    if(state === 1){
-	window.location.reload();
-	return;
-    }
-    
-    var textVal = $('#textArea').val();
-    //remove enter
-    textVal = textVal.substring(0, textVal.length -1);
-    $('#textArea').val(textVal);
-    if(state === 0) {
-    for (f in food) {
-        if (food[f] === textVal.toLowerCase()) {
-	    /*
-	      var ping = $('#s_ping').get(0);
-	    ping.volume = 1;
-	    ping.play();
-	    */
-	    soundPlayer.playBell();
-            numItemsOffList++;
-            cart.numItems++;
-
-            if(numItemsOffList >= gameVars.numItemsNeeded){
-                return gameOver();
-            } else {
-                if (cart.numItems >= gameVars.itemsPerRound) {
-                    state = 2;
-                }    
-                addToCart($('.item[name="' + food[f] + '"]'));
-            }
-            updateItemsNeededBox();
-            $('#textArea').val("");
-            
-            return;
-        }
-    }
-	if(!firstEnter){
-    $('#s_buzz').get(0).play();
-	}
-	else{
-	    firstEnter = true;
-	}
-    }
-}
-    
 $(document).ready(function() {
 })
 
@@ -382,11 +333,7 @@ function addToCart(item) {
 
     //$('#itemsNeededBox').html("Items left on list : " + (gameVars.numItemsNeeded - numItemsOffList));
 
-
     $('#animations').append(item);
-
-
-    //
     food = food.filter(function(element) {
         return element != item.attr('name');
     });
@@ -459,4 +406,3 @@ $(document).ready(function() {
     })
     $('#doors').mouseenter(function() { $('#s_door').get(0).play();});
 })
-
