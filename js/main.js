@@ -13,6 +13,7 @@ var cart = {
     numItems: 0,
     addTime: 500
 }
+var previousWordWasBad = false;
 
 var allFood = [["bread","cat food","green tea","medicine","milk"]
 	       ,["broccoli"," cat","rice","tooth paste","vegetables"]
@@ -98,6 +99,7 @@ var soundPlayer = new function(){
 
 function changeWordState(wordState){
     var s = ['badWord', 'correctWord', 'normalWord'];
+    previousWordWasBad = (wordState === 'badWord')
     for(i in s){
 	$('#shelves').removeClass(s[i]);
 	$('#footer').removeClass(s[i]);
@@ -176,7 +178,7 @@ function startRound(goFaster){
     
     }
     loadItems();
-    if(food == undefined || food.length === 0){
+    if(food === undefined || food.length === 0){
         return gameOver();
     }
     dump = "";
@@ -237,7 +239,7 @@ function typedFoods(letter){
 	return;
     }
     var trimmed = $('#textArea').val().trim();
-    if(trimmed == ''){
+    if(trimmed === ''){
 	$('#textArea').val(trimmed);
     }
     if(state === 2){
@@ -256,7 +258,7 @@ function typedFoods(letter){
 	}
     }
 
-    changeWordState('normalWord');
+
 //    $('#wordBox').html(stringFromCharArray(charsTyped));
 
     for(f in food){
@@ -266,12 +268,12 @@ function typedFoods(letter){
                 good = false;
             }
         }
-        if (good == true){
+        if (good === true){
 	   
             validFoods.push(food[f]);
 
             //the entire word has been typed correctly
-            if(charsTyped.length == food[f].length) {
+            if(charsTyped.length === food[f].length) {
 		changeWordState('correctWord');
 		selectFood();
 		logger.totalCharsTyped += charsTyped.length;
@@ -284,18 +286,22 @@ function typedFoods(letter){
 
     selectFood();
     //The character was incorrect
-    if(validFoods.length == 0){
+    if(validFoods.length === 0){
 /*        $('body').addClass('error');
         setTimeout(function(){
             $('body').removeClass('error'); 
         }, 300)*/
-	$('#s_buzz').get(0).play();
+	if (!previousWordWasBad) {
+	    $('#s_buzz').get(0).play();
+	}
 	logger.errors++;
+
 	changeWordState('badWord');
 	charsTyped = Array();
     }
     else{
 //    $('#footer').removeClass('badWord');
+	changeWordState('normalWord');
     }
     if(debugging){
         alert(validFoods);
@@ -304,7 +310,7 @@ function typedFoods(letter){
 }
 
 function checkEnterPressed(e) {
-    if (e.which == 13) {
+    if (e.which === 13) {
         pressEnter();
     }
 }
@@ -322,7 +328,7 @@ function pressEnter() {
     $('#textArea').val(textVal);
     if(state === 0) {
     for (f in food) {
-        if (food[f] == textVal.toLowerCase()) {
+        if (food[f] === textVal.toLowerCase()) {
 	    /*
 	      var ping = $('#s_ping').get(0);
 	    ping.volume = 1;
@@ -443,7 +449,7 @@ $(document).ready(function() {
     })
     $(document).keydown(function(e) {
         dump += " " + e.which;
-        if (e.which == 13 && roundNum == 0) {
+        if (e.which === 13 && roundNum === 0) {
             setup()
             return false;
         }
